@@ -8,7 +8,7 @@ var router = express.Router();
 
 var generateDataPoints = function (initialValue, count, initialTimestamp) {
 
-    var y = initialValue;
+    var y = parseInt(initialValue);
     var dataPoints = [];
 
     for (var i = 0; i < count; i += 1) {
