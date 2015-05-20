@@ -6,9 +6,9 @@ var json2csv = require('json2csv');
 var fs = require('fs');
 var router = express.Router();
 
-var generateDataPoints = function (count, initialTimestamp) {
+var generateDataPoints = function (initialValue, count, initialTimestamp) {
 
-    var y = 0;
+    var y = initialValue;
     var dataPoints = [];
 
     for (var i = 0; i < count; i += 1) {
@@ -29,11 +29,12 @@ var generateDataPoints = function (count, initialTimestamp) {
 
 router.get('/', function (req, res) {
 
+    var initialValue = req.query.value || 100;
     var limit = req.query.points || 10;
     var timestamp = moment('2015-01-01');
 
     var data = [];
-    var dataPoints = generateDataPoints(limit, timestamp);
+    var dataPoints = generateDataPoints(initialValue, limit, timestamp);
     var dataSeries = {type: 'line'};
     dataSeries.dataPoints = dataPoints;
     data.push(dataSeries);
@@ -49,7 +50,7 @@ router.get('/', function (req, res) {
                 console.log(err);
             }
 
-            res.render('index', {title: 'Stockprice Generator', file: csvFile, points: limit, data: data});
+            res.render('index', {title: 'Stockprice Generator', file: csvFile, points: limit, value: initialValue, data: data});
         });
     });
 
